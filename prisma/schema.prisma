@@ -1,0 +1,29 @@
+// schema.prisma
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Item {
+  id           Int @id @default(autoincrement())
+  name         String?
+  inventory    Inventory?  @relation(fields: [inventoryId], references: [id])
+  inventoryId  Int?
+}
+
+model Inventory {
+  id         Int      @id @default(autoincrement())
+  items      Item[]
+  player     Player?  @relation(fields: [playerId], references: [id])
+  playerId   Int?
+}
+
+model Player {
+  id         Int     @id @default(autoincrement())
+  username   String?  @default("")
+  inventory  Inventory?
+}
